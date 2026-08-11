@@ -1,4 +1,4 @@
-# EffectfulRealizability
+# effectful-realizability-in-lean
 
 Lean formalization of the theory of Effectful Realizability
 
