@@ -7,6 +7,7 @@ Authors: Rinta Yamada
 import Mathlib.Order.Basic
 import Mathlib.Order.Notation
 import Mathlib.Order.Heyting.Basic
+import Mathlib.Order.Monotone.Defs
 
 abbrev isJoinOf [Preorder P] (φ ψ j : P) : Prop := ∀ χ : P, j ≤ χ ↔ ((φ ≤ χ) ∧ (ψ ≤ χ))
 abbrev isJoinOfAlt [Preorder P] (φ ψ j : P) : Prop :=
