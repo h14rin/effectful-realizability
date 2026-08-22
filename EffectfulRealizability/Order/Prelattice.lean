@@ -9,6 +9,17 @@ import Mathlib.Order.Notation
 import Mathlib.Order.Heyting.Basic
 import Mathlib.Order.Monotone.Defs
 
+/-!
+# Order
+
+This file provides elementary definitions and theorems for ordered sets,
+especially for prelattices and Heyting prealgebras.
+
+Let `a` and `b` be elements of a preorder.
+* The join `a ⊔ b` of `a` and `b` is the least upper bound.
+* The meet `a ⊓ b` of `a` and `b` is the greatest lower bound.
+-/
+
 abbrev isJoinOf [Preorder P] (φ ψ j : P) : Prop := ∀ χ : P, j ≤ χ ↔ ((φ ≤ χ) ∧ (ψ ≤ χ))
 abbrev isJoinOfAlt [Preorder P] (φ ψ j : P) : Prop :=
   ((φ ≤ j) ∧ (ψ ≤ j)) ∧ ∀ χ : P, ((φ ≤ χ) ∧ (ψ ≤ χ) -> j ≤ χ)
@@ -191,9 +202,10 @@ theorem join_coincide [Join P] : ∀ {a b j : P}, isJoinOf a b j ↔ (j ≃ (a �
       let q := Join.minimality habχ
       exact le_trans hjab q
 
+/-- A prelattice `P` is a preorder such that,
+  * `P` has the top (greatest) and bottom (least) elements;
+  * all pairs of elements `a, b ∈ P` have the join `a ⊔ b` and the meet `a ⊓ b`.
+-/
 class Prelattice (P : Type*) extends Preorder P, Top P, Bot P, Meet P, Join P where
   le_top : ∀ a : P, a ≤ ⊤
   bot_le : ∀ a : P, ⊥ ≤ a
-
-class HeytingPrealgebra (P : Type*) extends Prelattice P, HImp P where
-  himp_maximality : ∀ {a b c : P}, ((c ⊓ a) ≤ b) → (c ≤ (a ⇨ b))

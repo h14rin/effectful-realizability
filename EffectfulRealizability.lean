@@ -5,7 +5,8 @@ Authors: Rinta Yamada
 -/
 
 import EffectfulRealizability.Basic
-import EffectfulRealizability.Order
+import EffectfulRealizability.Order.Prelattice
+import EffectfulRealizability.Order.HeytingPrealgebra
 import EffectfulRealizability.EvidencedFrame.Definition
 import EffectfulRealizability.Category.Pseudofunctor
 import EffectfulRealizability.Category.Tripos

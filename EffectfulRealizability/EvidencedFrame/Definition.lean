@@ -5,7 +5,8 @@ Authors: Rinta Yamada
 -/
 
 import Mathlib.Data.Set.Basic
-import EffectfulRealizability.Order
+import EffectfulRealizability.Order.Prelattice
+import EffectfulRealizability.Order.HeytingPrealgebra
 
 universe u v
 

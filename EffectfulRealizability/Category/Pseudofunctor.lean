@@ -9,27 +9,24 @@ import Mathlib.CategoryTheory.Category.Pointed
 import Mathlib.CategoryTheory.Limits.Shapes.FiniteLimits
 import Mathlib.CategoryTheory.Category.Cat.CartesianClosed
 import Mathlib.Order.Hom.Basic
-import EffectfulRealizability.Order
+import EffectfulRealizability.Order.Prelattice
+import EffectfulRealizability.Order.HeytingPrealgebra
+
+/-!
+# Pseudofunctor
+
+In our contexts, a pseudofunctor is a mapping from a category to a preorder-enriched category;
+it resembles a functor but has some relaxed conditions.
+
+This can be generalized as a mapping between bicategories,
+whose definition is providedin `Mathlib.CategoryTheory.Bicategory.Functor.Pseudofunctor`.
+Howevere, to avoid complicating the discussion,
+we deliberately adopt the definition for the special case here.
+-/
 
 open CategoryTheory
 
-structure CatHeytingPrealgebra where
-  carrier : Type*
-  [inst : HeytingPrealgebra carrier]
-
-instance : CoeSort CatHeytingPrealgebra (Type*) where
-  coe A := A.carrier
-
-instance (A : CatHeytingPrealgebra) : HeytingPrealgebra A :=
-  A.inst
-
-instance instCategory : Category CatHeytingPrealgebra where
-  Hom A B := OrderHom A B
-  id A := OrderHom.id
-  comp f g := OrderHom.comp g f
-
-#print OrderHom.comp
-
+/-- A preorder-enriched category is a category in which each hom-set is equipped with a preorder. -/
 class PreorderEnrichedCategory (C : Type*) extends Category C where
   hom_le {X Y : C} : (Hom X Y) → (Hom X Y) → Prop
   hom_le_refl {X Y : C} (f : Hom X Y) : hom_le f f
@@ -38,8 +35,26 @@ class PreorderEnrichedCategory (C : Type*) extends Category C where
   comp_mono {X Y Z : C} (f g : Hom X Y) (h k : Hom Y Z) :
     hom_le f g → hom_le h k → hom_le (comp f h) (comp g k)
 
-instance instCatHeytingPrealgebraPreorderEnriched :
-    PreorderEnrichedCategory CatHeytingPrealgebra where
+/-- A category `CatHP` consists of the Heyting Prealgebras
+and order-preseving between them. This forms a preorder-enriched category.
+-/
+structure CatHP where
+  carrier : Type*
+  [inst : HeytingPrealgebra carrier]
+
+instance : CoeSort CatHP (Type*) where
+  coe A := A.carrier
+
+instance (A : CatHP) : HeytingPrealgebra A :=
+  A.inst
+
+instance instCategory : Category CatHP where
+  Hom A B := HpHom A B
+  id A := HpHom.id
+  comp f g := HpHom.comp g f
+
+instance instCatHPPreorderEnriched :
+    PreorderEnrichedCategory CatHP where
   hom_le {X Y} f g    := ∀ x : X, (f.toFun x)  ≤ (g.toFun x)
   hom_le_refl {X Y} f := by simp
   hom_le_trans {X Y } f g h := by
@@ -64,6 +79,9 @@ abbrev isomorphic [instC : PreorderEnrichedCategory C] {X Y : C}
 
 notation f "≃" g => isomorphic f g
 
+/-- TODO: For a category `C` and a preorder-enriched category `D`,
+a pseudofunctor `F : C → D` maps ...
+-/
 structure PreorderPseudofunctor (C : Type*) (D : Type*)
     [instC : Category C] [instD : PreorderEnrichedCategory D] where
   obj : C → D
